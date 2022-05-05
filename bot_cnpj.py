@@ -15,8 +15,9 @@ class Bot:
         page.click("input[name=\"cnpj\"]")
         page.click("button:has-text(\"Consultar\")")
 
-        html = page.locator("#principal")
-        html.text_content()
+        
+        # html = page.locator("#principal")
+        # html.text_content()
 
     with sync_playwright() as playwright:
         run(playwright)
