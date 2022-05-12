@@ -1,7 +1,8 @@
 from cgitb import text
+from gettext import find
 from xml.dom.minidom import Document
 from playwright.sync_api import sync_playwright
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 import pandas as pd
 
 
@@ -18,15 +19,11 @@ class Bot:
         page.click("input[name=\"cnpj\"]")
         page.click("button:has-text(\"Consultar\")")
         html = page.inner_html('#principal')
+        
+        soup = BeautifulSoup(html, 'html.parser')
+        table = soup.get_text('b')
 
-        soup = BeautifulSoup(html, 'html.parser') 
-        table = soup.text
-        # table = soup.select('tr')
-    
-        dfs = pd.read_html(html)
-        df = dfs[0]
-
-        print(df)
+        # table = table.replace(' ',' ').replace('\t','').replace('\xa0','').replace('\n','')
              
     with sync_playwright() as playwright:
         run(playwright)
