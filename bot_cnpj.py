@@ -1,5 +1,6 @@
 from cgitb import text
 from gettext import find
+from posixpath import split
 from xml.dom.minidom import Document
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup, Tag
@@ -23,8 +24,21 @@ class Bot:
         soup = BeautifulSoup(html, 'html.parser')
         table = soup.get_text('b')
 
-        # table = table.replace(' ',' ').replace('\t','').replace('\xa0','').replace('\n','')
-             
+
+        table = table.replace(' ',' ').replace('\t','').replace('\xa0','').replace('\n','').replace('b',' ')
+
+        numero_inscricao = table.split('NÚMERO DE INSCRIÇÃO')[1][4:24].strip()
+        data_abertura = table.split('DATA DE ABERTURA')[1][4:28].strip()
+        nome_empresarial = table.split('NOME EMPRESARIAL')[1][4:55].strip()
+        titulo_estabelacimento = table.split('TÍTULO DO ESTABELECIMENTO (NOME DE FANTASIA)')[1][4:69].strip()
+        
+
+
+        # numero_inscricao = table.split('NÚMERO DE INSCRIÇÃO') # split retorna uma lista
+        # numero_inscricao = numero_inscricao[1]
+        # numero_inscricao = numero_inscricao[4:22]
+
+
     with sync_playwright() as playwright:
         run(playwright)
         
