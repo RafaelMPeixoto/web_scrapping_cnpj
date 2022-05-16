@@ -2,6 +2,7 @@ from cgitb import text
 from gettext import find
 from posixpath import split
 from re import T
+from subprocess import list2cmdline
 from xml.dom.minidom import Document
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup, Tag
@@ -9,6 +10,7 @@ import pandas as pd
 
 class Bot:
     def logging(playwright):
+
         firefox = playwright.firefox
         browser = firefox.launch(headless=False)
         page = browser.new_page()
@@ -26,6 +28,7 @@ class Bot:
 
         table = table.replace(' ',' ').replace('\t','').replace('\xa0','').replace('\n','').replace('b',' ')
 
+        
         numero_inscricao = table.split('NÚMERO DE INSCRIÇÃO')[1][4:24].strip()
         data_abertura = table.split('DATA DE ABERTURA')[1][4:28].strip()
         nome_empresarial = table.split('NOME EMPRESARIAL')[1][4:55].strip()
@@ -37,12 +40,33 @@ class Bot:
         municipio = table.split('MUNICÍPIO')[1][4:63].strip()
         uf = table.split('UF')[1][4:20].strip()
         email = table.split('ENDEREÇO ELETRÔNICO')[1][4:128].strip()
-        fone = table.split('TELEFONE')[1][4:32].replace(' ','').split()
+        fone = table.split('TELEFONE')[1][4:32].replace(' ','').strip()
 
+        dados1 = (
+                    [numero_inscricao], 
+                    [data_abertura],    
+                    [nome_empresarial], 
+                    [titulo_estabelacimento],
+                    [logradrouro],
+                    [numero],
+                    [cep],
+                    [bairro],
+                    [municipio],
+                    [uf],
+                    [email],
+                    [fone]
+        )
 
         
+        page.locator("text=Consultar QSA").click()
+
+        print(dados1)
+
     with sync_playwright() as playwright:
         logging(playwright)
+            
+    
+                    
         
         
         
