@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup, Tag
 import pandas as pd
 
 class Bot:
-    def logging(playwright):
+    def run(playwright):
 
         firefox = playwright.firefox
         browser = firefox.launch(headless=False)
@@ -28,7 +28,8 @@ class Bot:
 
         table = table.replace(' ',' ').replace('\t','').replace('\xa0','').replace('\n','').replace('b',' ')
 
-        
+    # def extrair(table, page):
+
         numero_inscricao = table.split('NÚMERO DE INSCRIÇÃO')[1][4:24].strip()
         data_abertura = table.split('DATA DE ABERTURA')[1][4:28].strip()
         nome_empresarial = table.split('NOME EMPRESARIAL')[1][4:55].strip()
@@ -54,16 +55,25 @@ class Bot:
                     [municipio],
                     [uf],
                     [email],
-                    [fone]
-        )
-
+                    [fone])
         
         page.locator("text=Consultar QSA").click()
 
-        print(dados1)
+        html = page.inner_html('#principal')
+        soup = BeautifulSoup(html, 'html.parser')
+        table = soup.get_text('div')
+
+        table = table.replace('\ndiv','').replace('\t','').replace('\n','').replace('\xa0div','').replace('div','') 
+        
+        cnpj = table.split('CNPJ')[1][3:25].strip()
+        nome_empresarial1 = table.split('NOME EMPRESARIAL')[1][3:157].strip()
+        capital_social = table.split('CAPITAL SOCIAL')[1][3:39].strip()
+
+        
 
     with sync_playwright() as playwright:
-        logging(playwright)
+        run(playwright)
+        # extrair(playwright)
             
     
                     
