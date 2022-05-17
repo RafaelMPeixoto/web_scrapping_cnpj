@@ -54,9 +54,9 @@ class Bot:
                   [municipio],
                   [uf],
                   [email],
-                  [fone]),"".join(map(str, dados1))
+                  [fone])
         
-        print(f'Número de Inscrição: {fone}'
+        print(f'Número de Inscrição: {numero_inscricao}'
             '\n'f'Data de abertura: {data_abertura}'
             '\n'f'Nome da Empresa: {nome_empresarial}'
             '\n'f'Título do Estabelecimento: {titulo_estabelecimento}'
