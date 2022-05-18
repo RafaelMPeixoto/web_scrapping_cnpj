@@ -1,3 +1,4 @@
+from ast import Div
 from cgitb import text
 from gettext import find
 from posixpath import split
@@ -18,7 +19,7 @@ class Bot:
 
         page.click('#captchaSonoro')
 
-        page.fill("input[name=\"cnpj\"]", "10.931.607/0001-49")
+        page.fill("input[name=\"cnpj\"]", "02.421.421/0001-11")
         page.click("input[name=\"cnpj\"]")
         page.click("button:has-text(\"Consultar\")")
         
@@ -33,7 +34,6 @@ class Bot:
         numero_inscricao = table.split('NÚMERO DE INSCRIÇÃO')[1][4:24].strip()
         data_abertura = table.split('DATA DE ABERTURA')[1][4:28].strip()
         nome_empresarial = table.split('NOME EMPRESARIAL')[1][4:55].strip()
-        titulo_estabelecimento = table.split('TÍTULO DO ESTABELECIMENTO (NOME DE FANTASIA)')[1][4:69].strip()
         logradrouro = table.split('LOGRADOURO')[1][4:93].strip()
         numero = table.split('NÚMERO    ')[1][0:15].strip()  
         cep = table.split('CEP')[1][4:23].strip()
@@ -43,49 +43,39 @@ class Bot:
         email = table.split('ENDEREÇO ELETRÔNICO')[1][4:128].strip()
         fone = table.split('TELEFONE')[1][4:32].replace(' ','').strip()
 
-        dados1 = ([numero_inscricao],
-                  [data_abertura],
-                  [nome_empresarial],
-                  [titulo_estabelecimento],
-                  [logradrouro],
-                  [numero],
-                  [cep],
-                  [bairro],
-                  [municipio],
-                  [uf],
-                  [email],
-                  [fone])
+        dados = (numero_inscricao,
+                 data_abertura,
+                 nome_empresarial,
+                 logradrouro,
+                 numero,
+                 cep,
+                 bairro,
+                 municipio,
+                 uf,
+                 email,
+                 fone)
         
-        print(f'Número de Inscrição: {numero_inscricao}'
-            '\n'f'Data de abertura: {data_abertura}'
-            '\n'f'Nome da Empresa: {nome_empresarial}'
-            '\n'f'Título do Estabelecimento: {titulo_estabelecimento}'
-            '\n'f'Endereço: {logradrouro}'
-            '\n'f'Número: {numero}'
-            '\n'f'CEP: {cep}'
-            '\n'f'Bairro: {bairro}'
-            '\n'f'Municipio: {municipio}'
-            '\n'f'UF: {uf}'
-            '\n'f'E-mail: {email}'
-            '\n'f'Fone: {fone}')
+        print(f'Número de Inscrição: {dados[0]}'
+            '\n'f'Data de abertura: {dados[1]}'
+            '\n'f'Nome da Empresa: {dados[2]}'
+            '\n'f'Endereço: {dados[3]}'
+            '\n'f'Número: {dados[4]}'
+            '\n'f'CEP: {dados[5]}'
+            '\n'f'Bairro: {dados[6]}'
+            '\n'f'Municipio: {dados[7]}'
+            '\n'f'UF: {dados[8]}'
+            '\n'f'E-mail: {dados[9]}'
+            '\n'f'Fone: {dados[10]}')
 
         
-        # page.locator("text=Consultar QSA").click()
+        page.locator("text=Consultar QSA").click()
 
-        # html = page.inner_html('#principal')
-        # soup = BeautifulSoup(html, 'html.parser')
-        # table = soup.get_text('div')
-
-        # table = table.replace('\ndiv',' ').replace('\t',' ').replace('\n',' ').replace('\xa0div',' ').replace('div',' ') 
+        html = page.inner_html('#principal')
+        rows=[]
+        soup = BeautifulSoup(html,"html.parser")
         
-        # cnpj = table.split('CNPJ')[1][3:25].strip()
-        # nome_empresarial1 = table.split('NOME EMPRESARIAL')[1][3:157].strip()
-        # capital_social = table.split('CAPITAL SOCIAL')[1][3:39].strip()
-
-        # nome_empresarial2 = table.split('Nome/Nome Empresarial')[1][1:151].strip()
-        # qualificacao = table.split('Qualificação')[1][1:23].strip()
-
-        # nome_empresarial3 = table.split('Nome Empresarial')   
+        table = table.replace('\t',' ').replace('\n',' ').replace('\xa0',' ').replace('div',' ')
+        
 
     with sync_playwright() as playwright:
         run(playwright)
