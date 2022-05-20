@@ -71,19 +71,16 @@ class Bot:
         page.locator("text=Consultar QSA").click()
 
         html = page.inner_html('#principal')
-        rows=[]
-        soup = BeautifulSoup(html,"html.parser")
-        
-        table = table.replace('\t',' ').replace('\n',' ').replace('\xa0',' ').replace('div',' ')
-        
+        soup = BeautifulSoup(html, 'lxml')
+        capital = soup.find('div', id='capital').text
+        quadroSocios = soup.find(class_='alert alert-warning').text
+        soup.findAll('div',string="Nome/Nome Empresarial:")
+
+        # nomeEmpresarial = 
+        # qualificacao = 
+
+        # div = soup.find('div').getText().replace('\n', ' ').replace('\t', ' ').replace('\xa0', ' ')
 
     with sync_playwright() as playwright:
         run(playwright)
         # extrair(playwright)
-            
-    
-                    
-        
-        
-        
-        
