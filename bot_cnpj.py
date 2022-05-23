@@ -19,7 +19,7 @@ class Bot:
 
         page.click('#captchaSonoro')
 
-        page.fill("input[name=\"cnpj\"]", "02.421.421/0001-11")
+        page.fill("input[name=\"cnpj\"]", "30.496.068/0001-74")
         page.click("input[name=\"cnpj\"]")
         page.click("button:has-text(\"Consultar\")")
         
@@ -73,10 +73,16 @@ class Bot:
         html = page.inner_html('#principal')
         soup = BeautifulSoup(html, 'lxml')
         capital = soup.find('div', id='capital').text
-        quadroSocios = soup.find(class_='alert alert-warning').text
-        soup.findAll('div',string="Nome/Nome Empresarial:")
+        socios = soup.findAll('div', class_="col-md-9")[3:]
+        qualificacao = soup.findAll('div', class_="col-md-5")[0:]
 
-        # nomeEmpresarial = 
+        
+
+        print(capital)
+
+        
+
+        # nomeEmpresarial =  
         # qualificacao = 
 
         # div = soup.find('div').getText().replace('\n', ' ').replace('\t', ' ').replace('\xa0', ' ')
