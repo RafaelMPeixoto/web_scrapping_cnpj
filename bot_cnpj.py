@@ -19,7 +19,7 @@ class Bot:
 
         page.click('#captchaSonoro')
 
-        page.fill("input[name=\"cnpj\"]", "30.496.068/0001-74")
+        page.fill("input[name=\"cnpj\"]", "02.558.157/0001-62")
         page.click("input[name=\"cnpj\"]")
         page.click("button:has-text(\"Consultar\")")
         
@@ -55,7 +55,7 @@ class Bot:
                  email,
                  fone)
         
-        print(f'Número de Inscrição: {dados[0]}'
+        print('\n''\n'f'Número de Inscrição: {dados[0]}'
             '\n'f'Data de abertura: {dados[1]}'
             '\n'f'Nome da Empresa: {dados[2]}'
             '\n'f'Endereço: {dados[3]}'
@@ -65,28 +65,38 @@ class Bot:
             '\n'f'Municipio: {dados[7]}'
             '\n'f'UF: {dados[8]}'
             '\n'f'E-mail: {dados[9]}'
-            '\n'f'Fone: {dados[10]}')
+            '\n'f'Fone: {dados[10]}''\n')
 
         
         page.locator("text=Consultar QSA").click()
 
         html = page.inner_html('#principal')
         soup = BeautifulSoup(html, 'lxml')
-        capital = soup.find('div', id='capital').text
+        capital = soup.find('div', id='capital').text.strip()
         socios = soup.findAll('div', class_="col-md-9")[3:]
         qualificacao = soup.findAll('div', class_="col-md-5")[0:]
 
+        listaCapital=(capital).split('\n')
+        while("" in listaCapital) : 
+            listaCapital.remove("") 
+
+        listaSocios = socios[0:]
+        listaQualificacao = qualificacao[0:]
+
+        print('\n'f'CNPJ: {listaCapital[1]}'
+            '\n'f'NOME EMPRESARIAL: {listaCapital[3]}'
+            '\n'f'CAPITAL SOCIAL: {listaCapital[5]}''\n'
+            )
+
+        print(f'Nome/Nome Empresarial: {listaSocios[1].text.strip()}'
+            '\n'f'Qualificação: {listaQualificacao[1].text.strip()}'
+            '\n''\n')
         
-
-        print(capital)
-
-        
-
-        # nomeEmpresarial =  
-        # qualificacao = 
-
-        # div = soup.find('div').getText().replace('\n', ' ').replace('\t', ' ').replace('\xa0', ' ')
+        browser.close()     
 
     with sync_playwright() as playwright:
         run(playwright)
-        # extrair(playwright)
+        while True:
+            run(playwright)
+        
+        
