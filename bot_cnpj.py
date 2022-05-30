@@ -8,9 +8,11 @@ from xml.dom.minidom import Document
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup, Tag
 import pandas as pd
+import time
+from lista import lista
 
 class Bot:
-    def run(playwright):
+    def run(playwright, lista):
 
         firefox = playwright.firefox
         browser = firefox.launch(headless=False)
@@ -19,7 +21,7 @@ class Bot:
 
         page.click('#captchaSonoro')
 
-        page.fill("input[name=\"cnpj\"]", "02.558.157/0001-62")
+        page.fill("input[name=\"cnpj\"]", lista[0])
         page.click("input[name=\"cnpj\"]")
         page.click("button:has-text(\"Consultar\")")
         
@@ -27,45 +29,21 @@ class Bot:
         soup = BeautifulSoup(html, 'html.parser')
         table = soup.get_text('b')
 
-        table = table.replace(' ',' ').replace('\t','').replace('\xa0','').replace('\n','').replace('b',' ')
+        lista_table=(table.replace('\t','').replace('\xa0','').replace('b','')).split('\n')
+        while('' in lista_table):
+            lista_table.remove('')
 
-    # def extrair(table, page):
-
-        numero_inscricao = table.split('NÚMERO DE INSCRIÇÃO')[1][4:24].strip()
-        data_abertura = table.split('DATA DE ABERTURA')[1][4:28].strip()
-        nome_empresarial = table.split('NOME EMPRESARIAL')[1][4:55].strip()
-        logradrouro = table.split('LOGRADOURO')[1][4:93].strip()
-        numero = table.split('NÚMERO    ')[1][0:15].strip()  
-        cep = table.split('CEP')[1][4:23].strip()
-        bairro = table.split('BAIRRO/DISTRITO')[1][4:63].strip()
-        municipio = table.split('MUNICÍPIO')[1][4:63].strip()
-        uf = table.split('UF')[1][4:20].strip()
-        email = table.split('ENDEREÇO ELETRÔNICO')[1][4:128].strip()
-        fone = table.split('TELEFONE')[1][4:32].replace(' ','').strip()
-
-        dados = (numero_inscricao,
-                 data_abertura,
-                 nome_empresarial,
-                 logradrouro,
-                 numero,
-                 cep,
-                 bairro,
-                 municipio,
-                 uf,
-                 email,
-                 fone)
-        
-        print('\n''\n'f'Número de Inscrição: {dados[0]}'
-            '\n'f'Data de abertura: {dados[1]}'
-            '\n'f'Nome da Empresa: {dados[2]}'
-            '\n'f'Endereço: {dados[3]}'
-            '\n'f'Número: {dados[4]}'
-            '\n'f'CEP: {dados[5]}'
-            '\n'f'Bairro: {dados[6]}'
-            '\n'f'Municipio: {dados[7]}'
-            '\n'f'UF: {dados[8]}'
-            '\n'f'E-mail: {dados[9]}'
-            '\n'f'Fone: {dados[10]}''\n')
+        print('\n'f'Número de Inscrição: {lista_table[3].strip()}'
+            '\n'f'Data de abertura: {lista_table[7].strip()}'
+            '\n'f'Nome da Empresa: {lista_table[9].strip()}'
+            '\n'f'Endereço: {lista_table[24].strip()}'
+            '\n'f'Número: {lista_table[27].strip()}'
+            '\n'f'CEP: {lista_table[32].strip()}'
+            '\n'f'Bairro: {lista_table[35].strip()}'
+            '\n'f'Municipio: {lista_table[38].strip()}'
+            '\n'f'UF: {lista_table[41].strip()}'
+            '\n'f'E-mail: {lista_table[43].strip()} {lista_table[44].strip()}'
+            '\n'f'Fone: {lista_table[46].strip()}''\n')
 
         
         page.locator("text=Consultar QSA").click()
@@ -88,15 +66,22 @@ class Bot:
             '\n'f'CAPITAL SOCIAL: {listaCapital[5]}''\n'
             )
 
-        print(f'Nome/Nome Empresarial: {listaSocios[1].text.strip()}'
+        print(f'Nome/Nome Empresarial: {listaSocios[0].text.strip()}'
+            '\n'f'Qualificação: {listaQualificacao[0].text.strip()}'
+            '\n''\n'
+            f'Nome/Nome Empresarial: {listaSocios[1].text.strip()}'
             '\n'f'Qualificação: {listaQualificacao[1].text.strip()}'
-            '\n''\n')
-        
+            '\n''\n'
+            f'Nome/Nome Empresarial: {listaSocios[2].text.strip()}'
+            '\n'f'Qualificação: {listaQualificacao[2].text.strip()}'
+            '\n''\n'
+            )
+        time.sleep(3)
         browser.close()     
 
     with sync_playwright() as playwright:
-        run(playwright)
+        run(playwright, lista)
         while True:
-            run(playwright)
+            run(playwright, lista)
         
         
