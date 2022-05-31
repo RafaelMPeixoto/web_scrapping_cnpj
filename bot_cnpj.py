@@ -1,18 +1,13 @@
-from ast import Div
-from cgitb import text
-from gettext import find
-from posixpath import split
-from re import T
-from subprocess import list2cmdline
-from xml.dom.minidom import Document
+from os import access
 from playwright.sync_api import sync_playwright
-from bs4 import BeautifulSoup, Tag
-import pandas as pd
+from bs4 import BeautifulSoup
 import time
 from lista import lista
 
 class Bot:
     def run(playwright, lista):
+        elem_atual = lista[0]
+        del lista[0]
 
         firefox = playwright.firefox
         browser = firefox.launch(headless=False)
@@ -20,8 +15,8 @@ class Bot:
         page.goto("https://servicos.receita.fazenda.gov.br/servicos/cnpjreva/Cnpjreva_Solicitacao.asp")
 
         page.click('#captchaSonoro')
-
-        page.fill("input[name=\"cnpj\"]", lista[0])
+        
+        page.fill("input[name=\"cnpj\"]", elem_atual)
         page.click("input[name=\"cnpj\"]")
         page.click("button:has-text(\"Consultar\")")
         
@@ -45,7 +40,6 @@ class Bot:
             '\n'f'E-mail: {lista_table[43].strip()} {lista_table[44].strip()}'
             '\n'f'Fone: {lista_table[46].strip()}''\n')
 
-        
         page.locator("text=Consultar QSA").click()
 
         html = page.inner_html('#principal')
@@ -76,12 +70,12 @@ class Bot:
             '\n'f'Qualificação: {listaQualificacao[2].text.strip()}'
             '\n''\n'
             )
-        time.sleep(3)
+
         browser.close()     
 
     with sync_playwright() as playwright:
         run(playwright, lista)
         while True:
             run(playwright, lista)
-        
-        
+                                
+            
