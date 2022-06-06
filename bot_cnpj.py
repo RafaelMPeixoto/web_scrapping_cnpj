@@ -49,8 +49,8 @@ class Bot:
         qualificacao = soup.findAll('div', class_="col-md-5")[0:]
 
         listaCapital=(capital).split('\n')
-        while("" in listaCapital) : 
-            listaCapital.remove("") 
+        while("" in listaCapital) :
+            listaCapital.remove("")
 
         listaSocios = socios[0:]
         listaQualificacao = qualificacao[0:]
